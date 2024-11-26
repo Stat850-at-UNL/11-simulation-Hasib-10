@@ -1,0 +1,41 @@
+---
+title: "Simulation"
+author: "Md Hasibur Rahman"
+format: html
+editor: visual
+---
+
+## Question. 
+What is the probability of winning a game of craps if the first roll is not a win (7 or 11) or a loss (2, 3, or 12)?
+
+## R Code implimentation
+The solution involves simulating a large number of games where the first roll establishes a "point" and then calculating the proportion of these games that are won.
+```{r}
+simulate_craps_game <- function() {
+  roll_dice <- function() sum(sample(1:6, 2, replace = TRUE))
+  first_roll <- roll_dice()
+  if (first_roll %in% c(7, 11)) return(list(outcome = "win", point = NA))
+  if (first_roll %in% c(2, 3, 12)) return(list(outcome = "lose", point = NA))
+  point <- first_roll
+  repeat {
+    roll <- roll_dice()
+    if (roll == point) return(list(outcome = "win", point = point))
+    if (roll == 7) return(list(outcome = "lose", point = point))
+  }
+}
+
+calculate_point_win_probability <- function(n_simulations = 100) {
+  results <- replicate(n_simulations, simulate_craps_game(), simplify = FALSE)
+    games_with_point <- sapply(results, function(x) !is.na(x$point))
+  filtered_results <- results[games_with_point]
+  wins <- sum(sapply(filtered_results, function(x) x$outcome == "win"))
+  total <- length(filtered_results)
+  
+  probability <- wins / total
+  return(probability)
+}
+
+set.seed(880)  
+(point_win_probability <- calculate_point_win_probability(1000))
+
+```
