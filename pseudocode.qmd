@@ -98,6 +98,7 @@ Create a flowchart illustrating how the game unfolds, using the function names p
 Include this as a PNG file in the repository and link to it here.
 
 <!-- Your image should go here. Use markdown syntax to add the image and give it a useful caption -->
+![Flowchart for craps game](Flowchart.png)
 
 ## Single game data structure {#sec-single-game-data}
 
@@ -177,9 +178,9 @@ Remember to fill in the input parameter inside the function definition as well a
 
 ```
 simulate_craps_game <- function() {
-  # Input: 
-  # Output: 
-  # Description:
+  # Input: None
+  # Output: A data frame with id(Roll number), roll(total dice roll), outcome
+  # Description: Simulates a single game of craps.Take Records each roll including its number, dice total and outcome
 }
 ```
 
@@ -189,9 +190,9 @@ Add a function that summarizes a game of craps (e.g. go from the data structure 
 
 ```
 summarize_craps_game <- function() {
-  # Input: 
-  # Output: 
-  # Description:
+  # Input: Data frame returned by simulate_craps_game function
+  # Output: A sigle row data frame with n_rolls(Total rolls in the game), point(The value of come out roll if a point established otherwise NA), outcome(final results)
+  # Description: this function extracts all the value of output.Which summarize the result of simulate_craps_game 
 }
 ```
 
@@ -201,8 +202,8 @@ summarize_craps_game <- function() {
 ```
 run_craps_simulation <- function(N) {
   # Input: an integer N which determines the number of games to simulate
-  # Output: 
-  # Description:
+  # Output: It has the same output colums as summarize function.
+  # Description: Simulates multiple craps game and results their summaries and combine them in a data frame
 }
 ```
 
