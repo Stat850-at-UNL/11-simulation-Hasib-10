@@ -86,11 +86,11 @@ simulate_craps_game()
 ## `run_craps_simulation`
 ```{r}
 run_craps_simulation <- function(N) {
-  results <- vector("list", N) # Pre-allocate a list for storing results
+  results <- vector("list", N)
   for (i in seq_len(N)) {
     results[[i]] <- summarize_craps_game()
   }
-  do.call(rbind, results) # Combine results into a single data.frame
+  do.call(rbind, results) 
 }
 
 ```
