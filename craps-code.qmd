@@ -17,13 +17,11 @@ Make sure this document compiles before you submit your answers.
 ## `roll_dice`
 
 ```{r}
+library(tidyverse)
 roll_dice <- function() {
-  # Input: None
-  # Output: an integer from 1:12
-  # Description: Generate 2 random integers from 1 to 6 and sum them
-  
-  sample(1:6, 2, replace = T) %>% sum()
+  sum(sample(1:6, 2, replace = TRUE))
 }
+
 ```
 
 ```{r}
@@ -37,40 +35,73 @@ roll_dice()
 ## `simulate_craps_game`
 ```{r}
 simulate_craps_game <- function() {
-  # Input: 
-  # Output: 
-  # Description:
+  first_roll <- roll_dice()
+  if (first_roll %in% c(7, 11)) return("win")
+  if (first_roll %in% c(2, 3, 12)) return("lose")
+  
+  point <- first_roll
+  repeat {
+    roll <- roll_dice()
+    if (roll == point) return("win")
+    if (roll == 7) return("lose")
+  }
 }
+
+```
+
+```{r}
+simulate_craps_game
+```
+
+## `summarize_craps_game`
+```{r}
+summarize_craps_game<- function() {
+  rolls <- 1
+  first_roll <- roll_dice()
+  
+  if (first_roll %in% c(7, 11)) {
+    return(data.frame(n_roll = rolls, point = first_roll, outcome = "win"))
+  } else if (first_roll %in% c(2, 3, 12)) {
+    return(data.frame(n_roll = rolls, point = first_roll, outcome = "lose"))
+  }
+  
+  point <- first_roll
+  repeat {
+    rolls <- rolls + 1
+    roll <- roll_dice()
+    if (roll == point) {
+      return(data.frame(n_roll = rolls, point = point, outcome = "win"))
+    } else if (roll == 7) {
+      return(data.frame(n_roll = rolls, point = point, outcome = "lose"))
+    }
+  }
+}
+
 ```
 
 ```{r}
 simulate_craps_game()
 ```
 
-## `summarize_craps_game`
-```{r}
-summarize_craps_game <- function() {
-  # Input: 
-  # Output: 
-  # Description:
-}
-```
-
-```{r}
-simulate_craps_game() %>% summarize_craps_game()
-```
-
 ## `run_craps_simulation`
 ```{r}
 run_craps_simulation <- function(N) {
-  # Input: an integer N which determines the number of games to simulate
-  # Output: 
-  # Description:
+  results <- vector("list", N) # Pre-allocate a list for storing results
+  for (i in seq_len(N)) {
+    results[[i]] <- summarize_craps_game()
+  }
+  do.call(rbind, results) # Combine results into a single data.frame
 }
+
 ```
 
 ```{r}
-result <- run_craps_simulation(N=5) # demonstrate result
-result
+result <- run_craps_simulation(5)
+win_lose_percentage <- result %>%
+  group_by(outcome) %>%
+  summarise(count = n(), percentage = paste0(round(count / nrow(result) * 100, 2), "%"))
+print(result)
+print(win_lose_percentage)
+
 ```
 
